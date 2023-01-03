@@ -1,6 +1,13 @@
 use std::env::{args, Args};
 fn main() {
-let args: Args= args();
-let first: Option<String> = args.nth(0);
-println!("{:?}", first)
+let mut args: Args= args();
+let first = args.nth(1).unwrap();
+let operator = args.nth(2).unwrap();
+let second = args.nth(3).unwrap();
+println!("{:?} {} {}", first, operator, second);
+}
+fn nth(&mut self, n: usize) -> Option<String>{
+    self.inner.next();
+    self.inner.next()
+    
 }
