@@ -6,5 +6,5 @@ fn main() {
         image_2: String::new(),
         output: String::new(),
     };
-    println!("Hello, world!");
+    println!("{:?}", args);
 }
