@@ -60,3 +60,4 @@ if image_2.dimensions() == (width, height) {
     (image_1, image_2.resize_exact(width, height, Triangle))
 }
 }
+fn combine_images(image_1: DynamicImage, image_2: DynamicImage,)
