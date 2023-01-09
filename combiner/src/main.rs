@@ -26,6 +26,11 @@ FloatingImage {
 }
 
     }
+    fn set_data(&mut self, data: Vec<u8>) -> Result<(), ImageDataErrors> {
+if data.len() > self.data.capacity() {
+     
+}
+    }
 }
 fn main() -> Result<(), ImageDataErrors> {
     let args = Args::new();
