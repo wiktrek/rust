@@ -6,7 +6,7 @@ use std::convert::TryInto;
 #[derive(Debug)]
 enum ImageDataErrors {
 DiffrentImageFormats,
-
+BufferTooSmall,
 }
 struct FloatingImage {
     width: u32,
@@ -28,8 +28,10 @@ FloatingImage {
     }
     fn set_data(&mut self, data: Vec<u8>) -> Result<(), ImageDataErrors> {
 if data.len() > self.data.capacity() {
-     
+     return Err(ImageDataErrors::BufferTooSmall);
 }
+self.data = data;
+Ok(())
     }
 }
 fn main() -> Result<(), ImageDataErrors> {
@@ -40,7 +42,10 @@ if image_format_1 != image_format_2 {
     return Err(ImageDataErrors::DiffrentImageFormats)
 }
 let (image_1, image_2) = standardise_size(image_1, image_2);
-let ouput = FloatingImage::new(image_1.width(), image_1.height(), args.output,);
+let mut output = FloatingImage::new(image_1.width(), image_1.height(), args.output,);
+let combined_data = combine_images(image_1, image_2);
+output.set_data(combined_data)?;
+image::save_buffer_with_format(output.name,&output.data, output.width, output.height, image::ColorType::Rgba8, image_format_1 ).unwrap();
 Ok(())
 }
 
