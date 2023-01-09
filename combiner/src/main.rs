@@ -66,7 +66,7 @@ fn combine_images(image_1: DynamicImage, image_2: DynamicImage,) -> Vec<u8>{
     alternate_pixels(vec_1, vec_2)
 }
 fn alternate_pixels(vec_1: Vec<u8>, vec_2: Vec<u8>) -> Vec<u8> {
-    let combined_data = vec![0u8; vec_1.len()];
+    let mut combined_data = vec![0u8; vec_1.len()];
     let mut i = 0;
     while i < vec_1.len() {
         if i % 8 == 0 {
@@ -76,7 +76,14 @@ fn alternate_pixels(vec_1: Vec<u8>, vec_2: Vec<u8>) -> Vec<u8> {
         }
         i += 4;
     }
+    combined_data
 }
 fn set_rgba(vec: Vec<u8>, start: usize, end: usize) -> Vec<u8> {
-    
+    let mut rgba = Vec::new();
+    for i in start..=end {
+        let val: u8 = match vec.get(i) {
+        Some(d) => *d, None => panic!("Index out of bounds")};
+rgba.push(val);
+    }
+    rgba
 }
