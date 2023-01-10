@@ -1,5 +1,7 @@
 mod print;
-use print::run;
+mod vars;
+use print::run as Print;
 fn main() {
-run("works?")
+Print("works?");
+vars::run();
 }
