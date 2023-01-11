@@ -12,5 +12,5 @@ println!("Hello World");
 Print("works");
 vars::run();
 convert("VI");
-valid_parentheses::check_valid("()");
+valid_parentheses::is_valid("()()()(){}".to_string());
 }
