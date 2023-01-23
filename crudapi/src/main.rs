@@ -13,12 +13,16 @@ fn index() -> Redirect {
 }
 
 #[get("/search?<msg>")]
-fn search(msg: Option<&str>) -> Value {
-// Status::NoContent;
-// if let Some(msg) = msg {
-//     return Status::NoContent;
-// }
-json!({"notes": "It works"})
+fn search(msg: Option<&str>) -> Result<Value, Status> {
+
+if let Some(msg) = msg {
+    println!("{msg}");
+    return Err(Status::NoContent);
+}
+Ok(json!({
+    "notes": "It works"
+}))
+
 }
 #[launch]
 fn rocket() -> _ {
