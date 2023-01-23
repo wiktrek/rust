@@ -18,19 +18,21 @@ fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest::Erro
     let github_release = response.json::<Value>().await?;
     github_release
 }
-#[get("/search?<msg>")]
-fn search(msg: Option<&str>) -> Result<Value, Status> {
+#[get("/search?<repo>")]
+fn search(msg: Option<&str>, client: &State<Client>) -> Result<Value, Status> {
 
 if let Some(msg) = msg {
     println!("{msg}");
     return Err(Status::NoContent);
 }
-get_latest_release(, ).or_else(Err(Status::NoContent))
+get_latest_release(, ).await.or_else(Err(Status::NoContent))
 
 }
 #[launch]
 fn rocket() -> _ {
-    rocket::build()
+    rocket::build().menage(
+        reqwest::Client::builder().user_agent("reqwest").build().unwrap()
+    )
     .mount("/",routes![index])
     .mount(SEARCH_PREFIX,routes![search])
 }
