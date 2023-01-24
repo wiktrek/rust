@@ -20,7 +20,7 @@ async fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest
     let github_release = response.json::<Value>().await?;
     Ok(github_release)
 }
-#[get("/search/?<msg>")]
+#[get("/search?<msg>")]
 async fn search(msg: Option<&str>, client: &State<Client>) -> Result<Value, Status> {
 
 if let Some(msg) = msg {
