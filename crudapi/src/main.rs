@@ -17,15 +17,17 @@ fn index() -> Redirect {
 fn make_tauri_response(github_release: &Value) -> Option<Value> {
 let mut response = json!({
     "version": github_release["tag_name"].as_str().ok_or("tag_name not found")?,
-    "notes": remove_suffix(&github_release["body"].as_str()?, "See the assets to download this version and install.").trim_end_mathes(['\r', '\n', '']),
-})
+    "notes": remove_suffix(&github_release["body"].as_str()?, "See the assets to download this version and install.").trim_end_mathes(['\r', '\n', ' ']),
+    "pub_date": github_release["published_at"].as_str()?,
+    
+});
 
 }
 async fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest::Error> {
     let url = format!("http://api.github.com/repos/{repo}/releases/latest");
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
-    make_tauri_response(&github_release).or(json!({}));
+    make_tauri_response(&github_release).or(json!({})).or_else(|e| Ok(e));
     Ok(github_release)
 }
 #[get("/search?<msg>")]
