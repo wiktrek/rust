@@ -17,7 +17,7 @@ fn index() -> Redirect {
 fn make_tauri_response(github_release: &Value) -> Option<Value> {
 let mut response = json!({
     "version": github_release["tag_name"].as_str().ok_or("tag_name not found")?,
-    
+    "notes": remove_suffix(&github_release["body"].as_str()?, "See the assets to download this version and install.").trim_end_mathes(['\r', '\n', '']),
 })
 
 }
