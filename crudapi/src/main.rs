@@ -15,7 +15,10 @@ fn index() -> Redirect {
     Redirect::to(uri!(SEARCH_PREFIX, search(msg)))
 }
 fn make_tauri_response(github_release: &Value) -> Option<Value> {
-
+let mut response = json!({
+    "version": github_release["tag_name"].as_str().ok_or("tag_name not found")?,
+    
+})
 
 }
 async fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest::Error> {
