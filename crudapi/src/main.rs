@@ -14,13 +14,15 @@ fn index() -> Redirect {
     let msg:Option<&str> = None;
     Redirect::to(uri!(SEARCH_PREFIX, search(msg)))
 }
-fn manipulate_json() -> Option<Value> {
-    
+fn make_tauri_response(github_release: &Value) -> Option<Value> {
+
+
 }
 async fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest::Error> {
     let url = format!("http://api.github.com/repos/{repo}/releases/latest");
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
+    make_tauri_response(&github_release);
     Ok(github_release)
 }
 #[get("/search?<msg>")]
