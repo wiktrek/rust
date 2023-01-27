@@ -22,7 +22,7 @@ async fn get_latest_release(client: &Client,repo: &str)  -> Result<Value,reqwest
     let url = format!("http://api.github.com/repos/{repo}/releases/latest");
     let response = client.get(&url).send().await?;
     let github_release = response.json::<Value>().await?;
-    make_tauri_response(&github_release);
+    make_tauri_response(&github_release).or(json!({}));
     Ok(github_release)
 }
 #[get("/search?<msg>")]
