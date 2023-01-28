@@ -8,14 +8,17 @@ struct ExternalUrls{
     spotify: String,
 }
 #[derive(Serialize, Deserialize, Debug)]
-struct Atrist{
+struct Artist{
     name: String,
     external_url: ExternalUrls,
 }
 #[derive(Serialize, Deserialize, Debug)]
 struct Album{
+    name: String,
+    artists: Vec<Artist>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Track{
+    
 }
