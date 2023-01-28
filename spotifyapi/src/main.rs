@@ -42,10 +42,10 @@ struct APIResponse {
 
 fn print_tracks(tracks: Vec<&Track>) {
     for track in tracks {
-        println!("{}", track.name);
-        println!("{}", track.album.name);
+        println!("Track Name: {}", track.name);
+        println!("Album: {}", track.album.name);
         println!(
-            "{}",
+            "Artists: {}",
             track
                 .album
                 .artists
@@ -53,7 +53,7 @@ fn print_tracks(tracks: Vec<&Track>) {
                 .map(|artist| artist.name.to_string())
                 .collect::<String>()
         );
-        println!("{}", track.external_urls.spotify);
+        println!("Link: {}", track.external_urls.spotify);
         println!("---------")
     }
 }
