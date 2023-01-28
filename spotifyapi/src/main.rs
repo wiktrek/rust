@@ -12,3 +12,10 @@ struct Atrist{
     name: String,
     external_url: ExternalUrls,
 }
+#[derive(Serialize, Deserialize, Debug)]
+struct Album{
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Track{
+}
