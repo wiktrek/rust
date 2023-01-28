@@ -1,7 +1,6 @@
 use reqwest::{self, header};
 use reqwest::header::{ACCEPT,AUTHORIZATION,CONTENT_TYPE};
 use serde::{Deserialize,Serialize};
-use std::any::request_ref;
 use std::env;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -38,7 +37,7 @@ struct Items<T> {
     items: Vec<T>
 }
 fn print_tracks(tracks: Vec<&Track>) {
-
+for 
 }
 #[tokio::main]
 async fn main() {
@@ -54,10 +53,19 @@ async fn main() {
     .get(url)
     .header(AUTHORIZATION, format!("Bearer {}", auth_token))
     .header(CONTENT_TYPE, "application/json")
-    .header(ACCEPT, "application/jso").send().await.unwrap();
-    match response.status(){
+    .header(ACCEPT, "application/jso")
+    .send()
+    .await
+    .unwrap();
+    match response.status() {
         reqwest::StatusCode::OK => {
-            
+            match response.json::<APIResponse>().await {
+                Ok(parsed) => print_tracks(parsed.tracks.items.iter().collect()),
+                Err(_) => println!("the response didn't match the struct / shape")
+            }
+        }
+        reqwest::StatusCode::UNAUTHORIZED => {
+            println!("Need to grab a new token");
         }
     }
 
