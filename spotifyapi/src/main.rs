@@ -1,5 +1,5 @@
 use reqwest;
-use reqwest::header::{ACCEPT,AUTHORIZATION,CONTENT_TYPE}
+use reqwest::header::{ACCEPT,AUTHORIZATION,CONTENT_TYPE};
 use serde::{Deserialize,Serialize};
 use std::env;
 
@@ -26,4 +26,16 @@ href: String,
 popularity: u32,
 album: Album,
 external_urls: ExternalUrls,
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct APIResponse{
+    tracks: Items<Track>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Items<T> {
+    items: Vec<T>
+}
+fn print_tracks(tracks: vec<&Tracks>) {
+    
 }
