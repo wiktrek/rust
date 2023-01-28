@@ -16,9 +16,14 @@ struct Artist{
 struct Album{
     name: String,
     artists: Vec<Artist>,
+    external_urls: ExternalUrls,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Track{
-    
+name: String,
+href: String,
+popularity: u32,
+album: Album,
+external_urls: ExternalUrls,
 }
