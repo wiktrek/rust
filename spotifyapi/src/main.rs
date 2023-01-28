@@ -8,4 +8,7 @@ struct ExternalUrls{
     spotify: String,
 }
 #[derive(Serialize, Deserialize, Debug)]
-struct Atrist{}
+struct Atrist{
+    name: String,
+    external_url: ExternalUrls,
+}
