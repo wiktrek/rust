@@ -37,7 +37,13 @@ struct Items<T> {
     items: Vec<T>
 }
 fn print_tracks(tracks: Vec<&Track>) {
-for 
+for track in tracks{
+    println!("{}", track.name);
+    println!("{}", track.album.name);
+    println!("{}", track.album.artists.iter().map(|artist| artist.name.to_string()).collect::<String>());
+    println!("{}", track.external_urls.spotify);
+    println!("----------------");
+}
 }
 #[tokio::main]
 async fn main() {
@@ -66,6 +72,9 @@ async fn main() {
         }
         reqwest::StatusCode::UNAUTHORIZED => {
             println!("Need to grab a new token");
+        }
+        other => {
+            panic!("something unexpected happened")
         }
     }
 
