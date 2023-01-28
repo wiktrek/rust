@@ -51,7 +51,14 @@ async fn main() {
     );
     let client = reqwest::Client::new();
     let response = client
-    .get(url);
-    .header()
+    .get(url)
+    .header(AUTHORIZATION, format!("Bearer {}", auth_token))
+    .header(CONTENT_TYPE, "application/json")
+    .header(ACCEPT, "application/jso").send().await.unwrap();
+    match response.status(){
+        reqwest::StatusCode::OK => {
+            
+        }
+    }
 
 }
