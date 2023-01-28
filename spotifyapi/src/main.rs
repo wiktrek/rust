@@ -1,6 +1,7 @@
-use reqwest;
+use reqwest::{self, header};
 use reqwest::header::{ACCEPT,AUTHORIZATION,CONTENT_TYPE};
 use serde::{Deserialize,Serialize};
+use std::any::request_ref;
 use std::env;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -36,10 +37,21 @@ struct APIResponse{
 struct Items<T> {
     items: Vec<T>
 }
-fn print_tracks(tracks: Vec<&Tracks>) {
+fn print_tracks(tracks: Vec<&Track>) {
 
 }
 #[tokio::main]
 async fn main() {
-let args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
+    let search_query = &args[1];
+    let auth_token = &args[2];
+    let url = format!(
+      "https://api.spotify.com/search?q={query}&type=track,artist",
+      query = search_query
+    );
+    let client = reqwest::Client::new();
+    let response = client
+    .get(url);
+    .header()
+
 }
