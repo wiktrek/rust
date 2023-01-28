@@ -36,6 +36,10 @@ struct APIResponse{
 struct Items<T> {
     items: Vec<T>
 }
-fn print_tracks(tracks: vec<&Tracks>) {
-    
+fn print_tracks(tracks: Vec<&Tracks>) {
+
+}
+#[tokio::main]
+async fn main() {
+let args: Vec<String> = env::args().collect();
 }
