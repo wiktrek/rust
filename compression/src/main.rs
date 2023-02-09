@@ -16,5 +16,9 @@ fn main() {
     let output = File::create(args().nth(2).unwrap()).unwrap();
     let mut encoder = GzEncoder::new(output, Compression::default());
     let start = Instant::now();
-
+    copy(&mut input, &mut encoder).unwrap();
+    let output = encoder.finish().unwrap();
+    println!("Source len: {:?}", input.get_ref().metadata().unwrap().len());
+    println!("Target len: {:?}", output.metadata().unwrap().len());
+    print!("Elapsed: {:?}", start.elapsed());
 }
