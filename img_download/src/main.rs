@@ -11,8 +11,8 @@ error_chain!{
 }
 
 #[tokio::main]
-fn main() -> Result<()> {
-let tmp_dir = Builder::new().prefix("example").tempdir();
+async fn main() -> Result<()> {
+let tmp_dir = Builder::new().prefix("example").tempdir()?;
 let target = "https://www.rust-lang.org/logos/rust-logo-512x512.png";
 let response = reqwest::get(target).await?;
 
@@ -26,6 +26,9 @@ let mut dest = {
 println!("file to download: {}", fname);
 let fname = tmp_dir.path().join(fname);
 println!("will be located under '{:?}'", fname);
-}
+File::create(fname)?
+};
+let content = response.text().await?;
+copy(&mut content.as_bytes(), &mut dest)?;
 Ok(())
 }
