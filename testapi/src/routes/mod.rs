@@ -1,3 +1,3 @@
 pub mod hello;
 pub mod index;
-pub mod db;
+pub mod test;

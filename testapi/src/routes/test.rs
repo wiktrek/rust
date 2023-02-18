@@ -1,5 +1,5 @@
 use rocket::*;
 #[get("/save/<user>/<data>")]
-pub fn db(user: String, data: String) -> String{
+pub fn test(user: String, data: String) -> String{
     format!("data:{data}, user: {user}")
 }
