@@ -6,7 +6,8 @@ use rocket::*;
 
 #[get("/save/<user>/<data>")]
 pub fn save(user: String, data: String) -> String{
-let path = Path::new("src/files/").with_file_name(format!("{}.txt", user.clone()));
+let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user.clone()));
+println!("{:?}", path);
 let display = path.display();
 
     let mut file = match File::create(&path) {
@@ -22,7 +23,7 @@ let display = path.display();
 }
 #[get("/delete/<user>")]
 pub fn delete(user: String) -> String{
-    let path = Path::new("src/files/").with_file_name(format!("{}.txt", user.clone()));
+    let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user.clone()));
         match fs::remove_file(&path) {
             Err(why) => return format!("{}", why),
             Ok(file) => file,
