@@ -1,10 +1,11 @@
+use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use rocket::*;
 
 #[get("/save/<user>/<data>")]
-pub fn test(user: String, data: String) -> String{
+pub fn save(user: String, data: String) -> String{
 let path = Path::new("src/files/").with_file_name(format!("{}.txt", user.clone()));
 let display = path.display();
 
@@ -19,3 +20,13 @@ let display = path.display();
     };
     format!("data:{data}, user: {user}")
 }
+#[get("/delete/<user>")]
+pub fn delete(user: String) -> String{
+    let path = Path::new("src/files/").with_file_name(format!("{}.txt", user.clone()));
+        match fs::remove_file(&path) {
+            Err(why) => return format!("{}", why),
+            Ok(file) => file,
+        };
+    
+        format!("deleted user: {user}")
+    }
