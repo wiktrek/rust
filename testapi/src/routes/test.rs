@@ -5,7 +5,7 @@ use rocket::*;
 
 #[get("/save/<user>/<data>")]
 pub fn test(user: String, data: String) -> String{
-let path = Path::new("src/files/").with_file_name(user.clone());
+let path = Path::new("src/files/").with_file_name(format!("{}.txt", user.clone()));
 let display = path.display();
 
     let mut file = match File::create(&path) {
