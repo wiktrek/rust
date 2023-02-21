@@ -1,0 +1,2 @@
+first you generate a random number.
+an array of numbers is generated and you have to guess the number that it picked ( it will give max num and min num).
