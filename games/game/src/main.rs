@@ -1,13 +1,20 @@
 use std::io;
 
 fn main() -> io::Result<()> {
-    let mut floor: Vec<String> = floor_gen();
-
     
-    floor.push(read_line());
-    println!("floor {:?}", floor);
+    let nums: Vec<String> = nums_gen();
+
+check_nums(read_line(), nums.clone());
+    println!("floor {:?}", nums);
   
     Ok(())
+}
+fn check_nums(num: String, nums: Vec<String>) -> bool {
+
+
+
+
+return false
 }
 fn read_line() -> String{
     let mut user_input = String::new();
@@ -17,11 +24,11 @@ fn read_line() -> String{
 
     return user_input.clone().replace("\r\n", "")
 }
-fn floor_gen() -> Vec<String>{
+fn nums_gen() -> Vec<String>{
     // floor: "0"..."9"
     let mut floor: Vec<String> = vec![];
     let mut a = 0;
-    while a < 11 {
+    while a < 10 {
         floor.push(a.to_string());
         a += 1;
     }
