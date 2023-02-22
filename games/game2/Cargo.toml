@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+tokio = { version = "1", features = ["full"]}
+sqlx = { version = "0.5", features = ["runtime-tokio-rustls","postgres"]}
+dotenv = "0.15.0"
