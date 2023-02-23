@@ -7,7 +7,10 @@ fn main() {
     let mut split: i32 = format!("{:?}", digits).replace("[", "").replace("]", "").replace(", ", "").parse().unwrap();
     split += 1;
     let char_vec: Vec<char> = split.to_string().chars().collect();
-
+    for c in char_vec {
+    
+        anwser.push(c.to_string().parse().unwrap());
+    }
     println!("{:?}", anwser);
     return;
 }
