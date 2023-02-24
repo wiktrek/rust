@@ -6,5 +6,5 @@ fn main() {
     .read_line(&mut user_input).expect("Couldn’t read from stdin");
 let pi: f64 = 3.14159265359;
 let a: f64 = user_input.replace("\r\n", "").parse().unwrap();
-println!("{}", (pi*(a*a)));
+println!("{}cm²", (pi*(a*a)));
 }
