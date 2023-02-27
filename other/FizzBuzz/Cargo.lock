@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "FizzBuzz"
+name = "fizz_buzz"
 version = "0.1.0"
