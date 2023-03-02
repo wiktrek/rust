@@ -23,7 +23,10 @@ fn main() {
             },
             {
                 "name": "end of the paragraph"
-            }
+            },
+        {
+            "name": "paragraph"
+        }
         ]
     }"#;
 let parsed: Article = read_json_type(json);
