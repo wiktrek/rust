@@ -1,8 +1,7 @@
 use rocket::*;
-use rocket::http::uri::Absolute;
+use rocket::response::Redirect;
 #[get("/redirect/<link>")]
-pub fn redirect(link: &str) -> String {
-    let link = format!("https://wiktrek.xyz/go/{}", link);
-    response::Redirect::temporary(uri!("https://wiktrek.xyz/"));
-    format!("{}", link)
+pub fn redirect(link: &str) -> Redirect {
+    let go = format!("https://wiktrek.xyz/go/{}", link);
+    Redirect::to(go)
 }
