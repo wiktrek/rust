@@ -1,5 +1,4 @@
 use rocket::*;
-use std::io;
 use chrono::prelude::*;
 #[get("/date")]
 pub fn date() -> String {
