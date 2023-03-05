@@ -2,6 +2,7 @@ mod index;
 mod file;
 mod date;
 mod redirect;
+mod google;
 pub use index::index as index_rs;
 pub use file::save;
 pub use file::delete;
