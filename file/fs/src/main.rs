@@ -5,11 +5,20 @@ fn main() {
     println!("Hello, world!");
 io::stdin()
     .read_line(&mut action).expect("Couldn’t read from stdin");
-    let a: &str = action.parse().unwrap();
+    let replace = action.replace("\r\n", "").replace(" ", "");
+    let a: &str = replace.as_str();
     match a {
-    "ez" => rename()
+    "create" => create(),
+    "rename" => rename(),
+    _ => println!("error, picked: {}", a)
     }
 }
 fn rename() {
-
+println!("rename")
+}
+fn create() {
+    println!("create")
+}
+fn remove() {
+    println!("remove")
 }
