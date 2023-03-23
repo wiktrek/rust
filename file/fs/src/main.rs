@@ -9,6 +9,7 @@ io::stdin()
     let a: &str = replace.as_str();
     match a {
     "create" => create(),
+    "remove" => remove(),
     "rename" => rename(),
     _ => println!("error, picked: {}", a)
     }
