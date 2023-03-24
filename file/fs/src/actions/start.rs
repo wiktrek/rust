@@ -1,4 +1,5 @@
-fn start() -> Result<(), std::io::Error>{
+use std::{ io, fs};
+pub fn start() -> Result<(), std::io::Error>{
     let mut action: String = String::new(); 
 
 io::stdin()

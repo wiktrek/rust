@@ -1,5 +1,5 @@
-use std::{ io, fs};
+mod actions;
 fn main() -> Result<(), std::io::Error>{
     println!("Hello, world!");
-start()
+actions::start()
 }
