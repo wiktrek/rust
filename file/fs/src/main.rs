@@ -11,7 +11,7 @@ io::stdin()
     "create" => create(),
     "remove" => remove(),
     "rename" => return rename(),
-    _ => println!("error, picked: {}", a)
+    _ => panic!("error, picked: {}", a)
     }
 }
 fn rename() -> Result<(), std::io::Error> {
@@ -29,17 +29,17 @@ io::stdin()
     let replace_path = path.replace("\r\n", "").replace(" ", "");
     let replace_path_to = path_to.replace("\r\n", "").replace(" ", "");
 
-    fs::rename(replace_path, replace_path_to);
+    let result = fs::rename(replace_path, replace_path_to);
 
 
 println!("rename");
-    Ok(())
+    result
 }
 fn create() ->  Result<(), std::io::Error>{
     println!("create");
     Ok(())
 }
 fn remove() ->  Result<(), std::io::Error> {
-    println!("remove")
+    println!("remove");
     Ok(())
 }
