@@ -1,5 +1,7 @@
-mod actions;
+use crate::start::start;
+
+mod start;
 fn main() -> Result<(), std::io::Error>{
     println!("Hello, world!");
-actions::start()
+start::start()
 }

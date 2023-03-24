@@ -1,4 +1,12 @@
 use std::{ io, fs};
+mod create;
+mod rename;
+use rename::rename;
+use create::create;
+mod options;
+use options::options;
+mod remove;
+use remove::remove;
 pub fn start() -> Result<(), std::io::Error>{
     let mut action: String = String::new(); 
 

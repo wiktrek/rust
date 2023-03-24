@@ -1,5 +1,5 @@
 use std::{ io, fs};
-fn create() ->  Result<(), std::io::Error>{
+pub fn create() ->  Result<(), std::io::Error>{
     println!("create");
 
     let mut path: String = String::new(); 
