@@ -1,5 +1,5 @@
 use std::{ io, fs};
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let mut action: String = String::new(); 
     
     println!("Hello, world!");
@@ -10,11 +10,11 @@ io::stdin()
     match a {
     "create" => create(),
     "remove" => remove(),
-    "rename" => rename(),
+    "rename" => return rename(),
     _ => println!("error, picked: {}", a)
     }
 }
-fn rename() {
+fn rename() -> Result<(), std::io::Error> {
     let mut path: String = String::new(); 
     let mut path_to: String = String::new(); 
 
@@ -29,17 +29,17 @@ io::stdin()
     let replace_path = path.replace("\r\n", "").replace(" ", "");
     let replace_path_to = path_to.replace("\r\n", "").replace(" ", "");
 
-
+    fs::rename(replace_path, replace_path_to);
 
 
 println!("rename");
-    let rename = fs::rename("", "");
-    println!("{:?}", rename);
-    
+    Ok(())
 }
-fn create() {
-    println!("create")
+fn create() ->  Result<(), std::io::Error>{
+    println!("create");
+    Ok(())
 }
-fn remove() {
+fn remove() ->  Result<(), std::io::Error> {
     println!("remove")
+    Ok(())
 }
