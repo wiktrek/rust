@@ -1,6 +1,6 @@
 use std::{ io, fs};
 
-pub fn remove() ->  result<(), std::io::error> {
+pub fn remove() -> Result<(), std::io::Error> {
     println!("remove");
 
     let mut path: String = String::new(); 

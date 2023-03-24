@@ -1,4 +1,3 @@
-use crate::start::start;
 
 mod start;
 fn main() -> Result<(), std::io::Error>{
