@@ -2,10 +2,10 @@ use std::error::Error;
 
 use csv;
 
-fn read_from_file(path: &str) -> Result<(), Box<dyn Error>>{
+fn read_from_file(path: &str) -> Result<(), Box<dyn Error>> {
     let mut reader = csv::Reader::from_path(path)?;
 
-    for result in reader.records(){
+    for result in reader.records() {
         let record = result?;
         println!("{:?}", record);
     }
@@ -13,7 +13,7 @@ fn read_from_file(path: &str) -> Result<(), Box<dyn Error>>{
 }
 
 fn main() {
-    if let Err(e) = read_from_file("./e.csv"){
+    if let Err(e) = read_from_file("./e.csv") {
         eprintln!("{}", e);
     }
 }

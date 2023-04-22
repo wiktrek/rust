@@ -5,4 +5,3 @@ pub fn options() -> Result<(), std::io::Error> {
 
     Ok(())
 }
-
