@@ -7,6 +7,7 @@ fn main() {
         vec![1, 1, 0, 0, 0],
         vec![0, 0, 0, 0, 1],
     ];
+    let mut grid_copy = grid.clone();
     let mut i = 0;
     while i < grid.len() {
         let mut j = 0;
@@ -20,13 +21,13 @@ fn main() {
 
         i += 1;
     }
+    return;
 }
 fn name(grid: &Vec<Vec<i32>>, i: usize, j: usize) {
-    let mut grid_copy = grid.clone();
-    if i >= grid.len() || j >= grid[i].len() || grid[i][j] == 0 {
+    if i < 0 || j < 0 || i >= grid.len() || j >= grid[i].len() || grid[i][j] != 1 {
         return;
     }
-    grid_copy[i][j] = 0;
+    grid[i][j] = 0;
     name(&grid_copy, i + 1, j);
     name(&grid_copy, i - 1, j);
     name(&grid_copy, i, j + 1);
