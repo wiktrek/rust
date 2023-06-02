@@ -4,8 +4,9 @@ fn main() {
     let searching_for = 4;
     while a < vec.len() {
         if vec[a] == searching_for {
-            return println!("fount at vec[{a}]");
+            return println!("found at vec[{a}]");
         }
         a += 1;
     }
+    return println!("not found");
 }
