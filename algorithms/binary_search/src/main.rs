@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 fn main() {
     // the array needs to be sorted
+    // a is sorted
     let a = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let mut lo = 0;
     let mut a_len = a.len();
