@@ -1,35 +1,16 @@
 fn main() {
-    // 200.Number of Islands
-    let mut count = 0;
-    let grid = vec![
-        vec![1, 1, 1, 1, 0],
-        vec![1, 1, 0, 1, 0],
-        vec![1, 1, 0, 0, 0],
-        vec![0, 0, 0, 0, 1],
-    ];
-    let mut grid_copy = grid.clone();
-    let mut i = 0;
-    while i < grid.len() {
-        let mut j = 0;
-        while j < grid[i].len() {
-            if grid[i][j] == 1 {
-                name(&grid, i, j);
-                count += 1;
-            }
-            j += 1;
-        }
+    // leetcode 242
 
-        i += 1;
+    let s = "te";
+    let t = "et";
+    let mut a: Vec<u8> = s.bytes().collect();
+    let mut b: Vec<u8> = t.bytes().collect();
+    a.sort();
+    b.sort();
+    if a == b {
+        print!("true")
+    } else {
+        print!("false")
     }
-    return;
-}
-fn name(grid: &Vec<Vec<i32>>, i: usize, j: usize) {
-    if i < 0 || j < 0 || i >= grid.len() || j >= grid[i].len() || grid[i][j] != 1 {
-        return;
-    }
-    grid[i][j] = 0;
-    name(&grid_copy, i + 1, j);
-    name(&grid_copy, i - 1, j);
-    name(&grid_copy, i, j + 1);
-    name(&grid_copy, i, j - 1);
+    // print!("{:?}, {:?}", a, b);
 }
