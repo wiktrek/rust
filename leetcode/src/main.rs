@@ -1,16 +1,14 @@
 fn main() {
-    // leetcode 242
-
-    let s = "te";
-    let t = "et";
-    let mut a: Vec<u8> = s.bytes().collect();
-    let mut b: Vec<u8> = t.bytes().collect();
-    a.sort();
-    b.sort();
-    if a == b {
-        print!("true")
-    } else {
-        print!("false")
+    // leetcode 49
+    use std::collections::HashMap;
+    let strs = ["eat".to_string(), "tea".to_string()];
+    let mut h = HashMap::new();
+    for s in strs {
+        let mut key: Vec<char> = s.chars().collect();
+        key.sort();
+        h.entry(key).or_insert(vec![]).push(s);
+        println!("{:?}", h)
     }
-    // print!("{:?}, {:?}", a, b);
+    let result: Vec<Vec<String>> = h.values().cloned().collect();
+    println!("{:?}", result)
 }
