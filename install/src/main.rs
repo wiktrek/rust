@@ -21,15 +21,29 @@ fn main() {
         .interact_text()
         .unwrap();
     let dir = Path::new(&input);
-    let mut pnpm = Command::new("cmd");
-    // let mut yarn = Command::new("yarn");
-    // let mut npm = Command::new("npm");
-
-    // pnpm.current_dir(dir);
-    let a: Output = pnpm
-        .args(["/C", format!("pnpm i {}", package).as_str()])
-        .output()
-        .expect("process failed to execute");
-
-    print!("e {:?}", a)
+    let mut cmd = Command::new("cmd");
+    if selection == 0 {
+        let a: Output = cmd
+            .current_dir(dir)
+            .args(["/C", format!("pnpm i {}", package).as_str()])
+            .output()
+            .expect("process failed to execute");
+        println!("{:?}", a.stdout);
+    }
+    if selection == 1 {
+        let a: Output = cmd
+            .current_dir(dir)
+            .args(["/C", format!("yarn add {}", package).as_str()])
+            .output()
+            .expect("process failed to execute");
+        println!("{:?}", a.stdout);
+    }
+    if selection == 2 {
+        let a: Output = cmd
+            .current_dir(dir)
+            .args(["/C", format!("npm i {}", package).as_str()])
+            .output()
+            .expect("process failed to execute");
+        println!("{:?}", a.stdout);
+    }
 }
