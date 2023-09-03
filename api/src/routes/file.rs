@@ -1,14 +1,14 @@
+use rocket::*;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use rocket::*;
 
 #[get("/save/<user>/<data>")]
-pub fn save(user: String, data: String) -> String{
-let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user.clone()));
-println!("{:?}", path);
-let display = path.display();
+pub fn save(user: String, data: String) -> String {
+    let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user));
+    println!("{:?}", path);
+    let display = path.display();
 
     let mut file = match File::create(&path) {
         Err(why) => panic!("couldn't create: {}", why),
@@ -22,12 +22,12 @@ let display = path.display();
     format!("data:{data}, user: {user}")
 }
 #[get("/delete/<user>")]
-pub fn delete(user: String) -> String{
-    let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user.clone()));
-        match fs::remove_file(&path) {
-            Err(why) => return format!("{}", why),
-            Ok(file) => file,
-        };
-    
-        format!("deleted user: {user}")
-    }
+pub fn delete(user: String) -> String {
+    let path = Path::new("src/files/text.txt").with_file_name(format!("{}.txt", user));
+    match fs::remove_file(path) {
+        Err(why) => return format!("{}", why),
+        Ok(file) => file,
+    };
+
+    format!("deleted user: {user}")
+}
