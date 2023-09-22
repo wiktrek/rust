@@ -2,17 +2,30 @@
 //
 // Execute `rustlings hint enums2` or use the `hint` watch subcommand for a
 // hint.
-
-// I AM NOT DONE
-
+//
+#[derive(Debug)]
+enum Colors {
+    Red,
+    Green,
+    Blue,
+}
 #[derive(Debug)]
 enum Message {
-    // TODO: define the different variants used below
+    Move { x: i32, y: i32 },
+    Echo(String),
+    ChangeColor(i32, i32, i32),
+    Quit, // TODO: define the different variants used below
 }
 
 impl Message {
     fn call(&self) {
         println!("{:?}", self);
+    }
+    fn Echo(&self, msg: String) {
+        println!("{:?} {}", self, msg);
+    }
+    fn ChangeColor(&self, red: i32, green: i32, blue: i32) {
+        println!("{:?} {} {}", red, green, blue);
     }
 }
 
