@@ -11,7 +11,7 @@ fn main() {
     );
     let text: Vec<&str> = file.split(", ").collect();
 
-    println!("{:?}", text);
+    // println!("{:?}", text);
 
     let num = rand::thread_rng().gen_range(0..text.len());
     println!("{} ", text[num]);
