@@ -6,9 +6,11 @@
 use std::process::Command;
 fn main() {
     println!("Hello, world!");
-    let output = Command::new("gcc")
-        .current_dir("../c")
-        .arg("c/main.c -o main")
+    let filename = "main";
+    let _output = Command::new("gcc")
+        .current_dir("./")
+        .arg(format!("c/{}.c -o {}", filename, filename))
         .spawn()
         .expect("Failed to execute command");
+    println!("Run {}.exe", filename)
 }
