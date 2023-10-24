@@ -1,7 +1,4 @@
-/*
-    run gcc c/main.c -o main
-    run main.exe
-*/
+
 
 use std::process::Command;
 fn main() {

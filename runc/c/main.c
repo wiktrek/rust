@@ -3,5 +3,6 @@
 #include <stdlib.h>
 int main() {
     printf("Hello world!");
+    printf("main.c");
     return 0;
 }
