@@ -1,7 +1,7 @@
 use std::process::Command;
 #[tokio::main]
 async fn main() {
-    let filename = "main";
+    let filename = "fib";
 
     let mut command = Command::new("cmd");
     if let Ok(mut child) = command
