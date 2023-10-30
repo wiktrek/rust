@@ -9,13 +9,13 @@ async fn main() {
         .spawn()
     {
         child.wait().expect("command wasn't running");
-
-        println!("Running {}.exe", filename);
-        let _run = Command::new("cmd")
-            .args(["/C", &format!("{filename}.exe")])
-            .spawn()
-            .expect("failed to execute process");
+        println!("Run {}.exe", filename)
+        // println!("Running {}.exe", filename);
+        // let _run = Command::new("cmd")
+        //     .args(["/C", &format!("{filename}.exe")])
+        //     .spawn()
+        //     .expect("failed to execute process");
     } else {
-        println!("ls command didn't start");
+        println!("Command failed");
     }
 }
