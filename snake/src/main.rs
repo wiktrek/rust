@@ -5,7 +5,7 @@
     3 -> snake head
 */
 use std::thread::sleep;
-use std::time::{Duration};
+use std::time::Duration;
 #[derive(Debug, PartialEq, Clone)]
 struct Point {
     x: i32,
@@ -22,6 +22,7 @@ enum Direction {
 struct Snake {
     head: Point,
     body: Vec<Point>,
+    max: i32,
     facing: Direction
 }
 fn main() {
@@ -32,8 +33,12 @@ fn main() {
     
     (grid, snake) = snake_head(grid);
     loop {
-    (grid, snake) = animate(grid, snake);
-sleep(Duration::new(1, 0))
+        if snake.head.x >= snake.max || snake.head.y >= snake.max || snake.head.x < 0 || snake.head.y < 0{
+            println!("You lost!!!!");
+            break;
+        }
+        (grid, snake) = animate(grid, snake);
+        sleep(Duration::from_secs(1));
     }
 
 }
@@ -44,8 +49,8 @@ fn generate_grid(max: i32) -> Vec<Point> {
         for j in 0..max {
             grid.push(
                 Point {
-                    x: j,
-                    y: i,
+                    x: i,
+                    y: j,
                     n: 0,
                 }
             )
@@ -59,10 +64,12 @@ fn snake_head(mut grid: Vec<Point>) -> (Vec<Point>, Snake) {
         head: Point {
             x: 0,
             y: 0,
+            
             n: 3
         },
         body: vec![],
-        facing: Direction::East
+        max: 10,
+        facing: Direction::South,
     };
     let head = grid.contains(&Point {
         x: 0,
@@ -78,7 +85,6 @@ fn snake_head(mut grid: Vec<Point>) -> (Vec<Point>, Snake) {
     (grid, snake)
 }
 fn draw_grid(grid: Vec<Point>) {
-    println!("{:?}", grid);
     let mut grid_string = String::new();
     for (i,n ) in grid.iter().enumerate() {
         if i % 10 == 0 {
@@ -101,7 +107,6 @@ fn animate(mut grid: Vec<Point>, mut snake: Snake) -> (Vec<Point>, Snake) {
     (grid, snake)
 }
 fn move_snake(mut grid: Vec<Point>, mut snake:Snake) -> (Vec<Point>, Snake) {
-    
     snake.body.pop();
 snake.body.push(Point {
         x: snake.head.x,
@@ -109,17 +114,47 @@ snake.body.push(Point {
         n: 2,
     });
     match snake.facing {
-        Direction::West => snake.head.x -= 1,
-        Direction::East => snake.head.x += 1,
-        Direction::North => snake.head.y += 1,
-        Direction::South => snake.head.y -= 1,
+        Direction::West => {
+            snake.head.x -= 1;
+            let position = snake.head.x + snake.head.y * 10;
+            grid[(position - 1)as usize] = Point {
+                x: snake.head.x - 1,
+                y: snake.head.y,
+                n: 0,
+            };
+            grid[position as usize] = snake.clone().head;
+    },
+        Direction::East => {
+            snake.head.x += 1;
+            let position = snake.head.x + snake.head.y * 10;
+            grid[(position + 1)as usize] = Point {
+                 x: snake.head.x + 1,
+                 y: snake.head.y,
+                 n: 0,
+            };
+            grid[position as usize] = snake.clone().head;
+    },
+        Direction::North => {
+            snake.head.y -= 1;
+            let position = snake.head.x + snake.head.y * 10;
+            grid[(position + 10)as usize] = Point {
+                x: snake.head.x -1,
+                y: snake.head.y,
+                n: 0,
+            };
+            grid[position as usize] = snake.clone().head;
+        },
+        Direction::South => {
+            snake.head.y += 1;
+            let position = snake.head.x + snake.head.y * 10; 
+            grid[(position - 10)as usize] = Point {
+                x: snake.head.x,
+                y: snake.head.y + 1,
+                n: 0,
+            };
+            grid[position as usize] = snake.clone().head;
+        },
     }
-    let position = snake.head.x + snake.head.y * 10;
-    grid[(position- 1)as usize] = Point {
-        x: snake.head.x - 1,
-        y: snake.head.y,
-        n: 0,
-    };
-    grid[position as usize] = snake.clone().head;
+
     (grid, snake)
 }
