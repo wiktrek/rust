@@ -4,6 +4,7 @@
     2 -> apple
     3 -> snake head
 */
+use ncurses::*;
 use std::thread::sleep;
 use std::time::Duration;
 #[derive(Debug, PartialEq, Clone)]
@@ -30,7 +31,7 @@ fn main() {
     let mut snake: Snake;
     let mut grid = generate_grid(10);
     // println!("{:?}", grid);
-    
+
     (grid, snake) = snake_head(grid);
     loop {
         if snake.head.x >= snake.max || snake.head.y >= snake.max || snake.head.x < 0 || snake.head.y < 0{
@@ -157,4 +158,8 @@ snake.body.push(Point {
     }
 
     (grid, snake)
+}
+fn controls(snake: Snake) -> Snake{
+
+return snake
 }
