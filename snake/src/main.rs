@@ -1,22 +1,34 @@
 //! Shows how to render simple primitive shapes with a single color.
 
+use std::borrow::BorrowMut;
+
 use bevy::{
-    prelude::*, render::view::RenderLayers, sprite::{MaterialMesh2dBundle, Mesh2dHandle}
+    math::bounding::*, 
+    prelude::*, 
+    sprite::MaterialMesh2dBundle
 };
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .init_state::<Direction>()
         .add_systems(Startup, setup)
-        .add_systems(Update, change_color)
+        .add_systems(Update, (move_snake, update_direction))
         .run();
 }
-
-const X_EXTENT: f32 = 300.;
+#[derive(States, Default, Debug, Hash, PartialEq, Eq, Clone, Copy)]
+enum Direction {
+    Up,
+    Down,
+    Left,
+    #[default]
+    Right
+}
+#[derive(Component)]
+struct Snake;
 
 #[derive(Component)]
-struct ChangeColor;
-
+struct Food;
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -24,39 +36,32 @@ fn setup(
 ) {
     commands.spawn(Camera2dBundle::default());
 
-    let shapes = vec![
-        Mesh2dHandle(meshes.add(Rectangle::new(30.0,30.0)).into()); 100
-    ];
-    let mut x = 0.0;
-    let mut y = 0.0;
-    for shape in shapes.into_iter() {
-        // Distribute colors evenly across the rainbow.
-        let color = Color::hsl(0., 7., 50.);
-
-        commands.spawn((MaterialMesh2dBundle {
-            mesh: shape,
-            material: materials.add(color),
-            transform: Transform::from_xyz(
-                // Distribute shapes from -X_EXTENT to +X_EXTENT.
-                -X_EXTENT / 2. + x as f32 / (10 ) as f32 * X_EXTENT,
-                y,
-                0.0,
-            ),
-            ..default()
-        },
-    ChangeColor)
-    );
-        if x != 9.0 {
-            x += 1.0
-        } else {
-            x = 0.0;
-            y += 30.0;
-        }
+    commands.spawn((MaterialMesh2dBundle {
+        mesh: meshes.add(Rectangle::new(10.0, 10.0)).into(),
+        transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
+        material: materials.add(ColorMaterial::default()),
+        ..default()
+    }, Snake));
+}
+fn move_snake(time: Res<Time>, mut snake: Query<&mut Transform, With<Snake>>,direction: Res<State<Direction>>,) {
+    for mut transform in &mut snake {
+        match **direction {
+            Direction::Up => transform.translation.y += 50. * time.delta_seconds(),
+            Direction::Down => transform.translation.y -= 50. * time.delta_seconds(),
+            Direction::Left => transform.translation.x -= 50. * time.delta_seconds(),
+            Direction::Right => transform.translation.x += 50. * time.delta_seconds(),
     }
 }
-fn change_color(time: Res<Time>, mut transforms: Query<&mut Transform, With<ChangeColor>>) {
-    for mut transform in &mut transforms {
-        let dt = time.delta_seconds();
-        transform.rotate_x(dt);
+}
+fn update_direction(mut direction: ResMut<NextState<Direction>>, keyboard: Res<ButtonInput<KeyCode>>,) {
+    if keyboard.pressed(KeyCode::ArrowRight) {
+        direction.set(Direction::Right)
+    }
+      if keyboard.pressed(KeyCode::ArrowLeft) {
+        direction.set(Direction::Left)
+    }   if keyboard.pressed(KeyCode::ArrowUp) {
+        direction.set(Direction::Up)
+    }   if keyboard.pressed(KeyCode::ArrowDown) {
+        direction.set(Direction::Down)
     }
 }
