@@ -42,6 +42,7 @@ fn setup(
         material: materials.add(ColorMaterial::default()),
         ..default()
     }, Snake));
+    spawn_apple(commands, meshes, materials)
 }
 fn move_snake(time: Res<Time>, mut snake: Query<&mut Transform, With<Snake>>,direction: Res<State<Direction>>,) {
     for mut transform in &mut snake {
@@ -64,4 +65,24 @@ fn update_direction(mut direction: ResMut<NextState<Direction>>, keyboard: Res<B
     }   if keyboard.pressed(KeyCode::ArrowDown) {
         direction.set(Direction::Down)
     }
+}
+fn spawn_apple(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+) {
+    commands.spawn(
+        (MaterialMesh2dBundle {
+        mesh: meshes.add(Rectangle::new(10.0, 10.0)).into(),
+        transform:  Transform::from_xyz(
+                10.0,
+                0.0,
+                0.0,
+            ),
+        material: materials.add(Color::RED),
+        ..default()
+    },
+    Food
+));
+    
 }
