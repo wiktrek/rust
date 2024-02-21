@@ -1,17 +1,21 @@
 //! Shows how to render simple primitive shapes with a single color.
 
 use bevy::{
-    prelude::*,  sprite::{MaterialMesh2dBundle, Mesh2dHandle}
+    prelude::*, render::view::RenderLayers, sprite::{MaterialMesh2dBundle, Mesh2dHandle}
 };
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
+        .add_systems(Update, change_color)
         .run();
 }
 
 const X_EXTENT: f32 = 300.;
+
+#[derive(Component)]
+struct ChangeColor;
 
 fn setup(
     mut commands: Commands,
@@ -25,11 +29,11 @@ fn setup(
     ];
     let mut x = 0.0;
     let mut y = 0.0;
-    for (i, shape) in shapes.into_iter().enumerate() {
+    for shape in shapes.into_iter() {
         // Distribute colors evenly across the rainbow.
         let color = Color::hsl(0., 7., 50.);
 
-        commands.spawn(MaterialMesh2dBundle {
+        commands.spawn((MaterialMesh2dBundle {
             mesh: shape,
             material: materials.add(color),
             transform: Transform::from_xyz(
@@ -39,12 +43,20 @@ fn setup(
                 0.0,
             ),
             ..default()
-        });
+        },
+    ChangeColor)
+    );
         if x != 9.0 {
             x += 1.0
         } else {
             x = 0.0;
             y += 30.0;
         }
+    }
+}
+fn change_color(time: Res<Time>, mut transforms: Query<&mut Transform, With<ChangeColor>>) {
+    for mut transform in &mut transforms {
+        let dt = time.delta_seconds();
+        transform.rotate_x(dt);
     }
 }
