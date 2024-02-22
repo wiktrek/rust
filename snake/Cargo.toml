@@ -1,3 +1,7 @@
+[features]
+default = []
+debug = ["bevy-inspector-egui"]
+
 [package]
 name = "snake"
 version = "0.1.0"
@@ -7,3 +11,4 @@ edition = "2021"
 
 [dependencies]
 bevy = { version = "0.13", features = ["bevy_sprite"] }
+bevy-inspector-egui = { version = "0.23.2", optional = true }
