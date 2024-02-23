@@ -1,4 +1,4 @@
-//! Shows how to render simple primitive shapes with a single color.
+// will separate it into different files in the future
 
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -117,17 +117,16 @@ fn eating_system(
         let head = p0.get_single().unwrap().1;
         Vec2::new(head.translation.x, head.translation.y)
     };
-    {
-        for (entity, food) in set.p1().iter_mut() {
+    let mut scored = 0;
+    for (entity, food) in set.p1().iter_mut() {
          if ((((food.translation.x - head_position.x) as f32).powf(2.0) + ((food.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER / 2.0 + FOOD_DIMENSIONS / 2.0) {
-            let e = commands.get_entity(entity);
-            if e.is_some() {
-                let mut unwraped = e.unwrap();
-                println!("{:?}", unwraped.id());
-                unwraped.despawn()
-            }
-            // set.p0().get_single_mut().unwrap().0.value += 1;
-            // println!("SNAKE ATE {}", set.p0().get_single().unwrap().0.value )
+            commands.get_entity(entity).unwrap().despawn();
+            
+            scored = 1;
+            
     }}
+    if scored == 1 {
+            set.p0().get_single_mut().unwrap().0.value += 1;
+            println!("SNAKE ATE {}", set.p0().get_single().unwrap().0.value );
     }
 }
