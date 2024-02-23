@@ -12,3 +12,4 @@ edition = "2021"
 [dependencies]
 bevy = { version = "0.13", features = ["bevy_sprite"] }
 bevy-inspector-egui = { version = "0.23.2", optional = true }
+rand = "0.8.5"
