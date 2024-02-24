@@ -1,7 +1,5 @@
 // will separate it into different files in the future
 
-use std::process::CommandArgs;
-
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy::{
@@ -14,9 +12,10 @@ fn main() {
     let mut binding = App::new();
     let app = binding
         .add_plugins(DefaultPlugins)
+        .insert_resource(SnakeParts::default())
         .init_state::<Direction>()
         .add_systems(Startup, setup)
-        .add_systems(Update, (move_snake, update_direction, eating_system, score_rendering_system));
+        .add_systems(Update, (move_snake, update_direction, eating_system, score_rendering_system, snake_length, tail_movement));
     #[cfg(feature = "debug")]
     app.add_plugins(WorldInspectorPlugin::new());
     app.run()
@@ -41,7 +40,7 @@ struct SnakeTail;
 #[derive(Component)]
 struct Food;
 
-#[derive(Default)]
+#[derive(Default, Resource)]
 pub struct SnakeParts(pub Vec<Entity>);
 #[derive(Component)]
 pub struct ScoreText;
@@ -51,17 +50,21 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>, 
     mut materials: ResMut<Assets<ColorMaterial>>,
+    mut tail_parts: ResMut<SnakeParts>,
     asset_server: Res<AssetServer>
 ) {
     let font = asset_server.load("fonts\\FiraSans-Bold.ttf");
     commands.spawn(Camera2dBundle::default());
-
-    commands.spawn((MaterialMesh2dBundle {
-        mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
-        transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
-        material: materials.add(ColorMaterial::default()),
-        ..default()
-    }, SnakeHead)).insert(Score { value: 0});
+    *tail_parts = SnakeParts(vec![
+        commands.spawn((MaterialMesh2dBundle {
+            mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
+            transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
+            material: materials.add(ColorMaterial::default()),
+            ..default()
+        }, SnakeHead)).insert(Score { value: 0}).id(),
+        spawn_tail(&mut commands)
+    ]);
+    
     // commands.spawn((MaterialMesh2dBundle {
     //     mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
     //     transform: Transform::from_translation(Vec3::new(-100., 0., 0.)),
@@ -105,10 +108,10 @@ fn setup(
 fn move_snake(time: Res<Time>, mut snake: Query<&mut Transform, With<SnakeHead>>,direction: Res<State<Direction>>,) {
     for mut transform in &mut snake {
         match **direction {
-            Direction::Up => transform.translation.y += 50. * time.delta_seconds(),
-            Direction::Down => transform.translation.y -= 50. * time.delta_seconds(),
-            Direction::Left => transform.translation.x -= 50. * time.delta_seconds(),
-            Direction::Right => transform.translation.x += 50. * time.delta_seconds(),
+            Direction::Up => transform.translation.y += PLAYER * time.delta_seconds(),
+            Direction::Down => transform.translation.y -= PLAYER * time.delta_seconds(),
+            Direction::Left => transform.translation.x -= PLAYER * time.delta_seconds(),
+            Direction::Right => transform.translation.x += PLAYER * time.delta_seconds(),
     }
 }
 }
@@ -168,5 +171,40 @@ fn score_rendering_system(mut text_query: Query<&mut Text, With<ScoreText>>, mut
     for mut text in text_query.iter_mut() {
         let score = score_query.iter_mut().next().unwrap().value;
         text.sections[1].value = format!("{:.2}", score);
+    }
+}
+fn spawn_tail(commands: &mut Commands) -> Entity {
+commands.spawn(SpriteBundle {
+          sprite: Sprite {
+            color: Color::WHITE,
+            custom_size: Some(Vec2::new(PLAYER, PLAYER)),
+            ..default()
+        },
+        transform: Transform::from_translation(Vec3::new(
+            0.,
+            0.,
+        10.
+        )), 
+        ..default()
+}).id()
+}
+fn snake_length(mut commands: Commands, mut snake_parts: ResMut<SnakeParts>, mut snake_head: Query<(&mut Score ,&mut Transform), With<SnakeHead>>) {
+    for (score, _head) in snake_head.iter_mut() {
+        if (score.value + 1) > snake_parts.0.len() {
+            println!("NOOOOOOOO");
+            snake_parts.0.push(spawn_tail(&mut commands))
+        }
+    }
+}
+fn tail_movement(mut transform_query: Query<&mut Transform>, snake_parts: ResMut<SnakeParts>) {
+    let head = *transform_query.get(snake_parts.0[0]).unwrap();
+    for (i, p) in snake_parts.0.iter().enumerate() {
+        println!("{:?}", p);
+        // let mut part = transform_query.get_mut(*p).unwrap();
+        // if i != 0 {
+        //     part.translation.y = head.translation.y - PLAYER;
+        //     part.translation.x = head.translation.x - PLAYER
+        // }
+        // println!("{:?}, {i}", part);
     }
 }
