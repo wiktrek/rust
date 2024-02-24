@@ -20,11 +20,10 @@ pub fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transf
         let mut p0 = set.p0();
         let mut part = p0.get_mut(*p).unwrap();
         println!("{} {:?} {:?}", i, prev.translation, part.translation);
-
         let prev_value = *part;
-        part.translation.y = prev.translation.y;
-        part.translation.x = prev.translation.x;
-        prev = prev_value;
+            part.translation.y = prev.translation.y;
+            part.translation.x = prev.translation.x;
+            prev = prev_value;
         }
     }
 
@@ -33,7 +32,7 @@ pub fn spawn_tail(commands: &mut Commands) -> Entity {
 commands.spawn(SpriteBundle {
           sprite: Sprite {
             color: Color::WHITE,
-            custom_size: Some(Vec2::new(PLAYER_DIMENSIONS, PLAYER_DIMENSIONS)),
+            custom_size: Some(Vec2::new(PLAYER_DIMENSIONS - 10., PLAYER_DIMENSIONS - 10.)),
             ..default()
         },
         transform: Transform::from_translation(Vec3::new(
