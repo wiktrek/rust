@@ -3,13 +3,13 @@
 #[cfg(feature = "debug")]
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy::{
-    prelude::*, 
-    sprite::MaterialMesh2dBundle, time::common_conditions::on_timer,
+    prelude::*, time::common_conditions::on_timer,
 };
 use std::time::Duration;
-use rand::*;
+
 mod systems;
 use systems::*;
+use systems::components::Direction;
 fn main() {
     let mut binding = App::new();
     let app = binding
@@ -30,19 +30,4 @@ fn main() {
     #[cfg(feature = "debug")]
     app.add_plugins(WorldInspectorPlugin::new());
     app.run()
-}
-fn spawn_tail(commands: &mut Commands) -> Entity {
-commands.spawn(SpriteBundle {
-          sprite: Sprite {
-            color: Color::WHITE,
-            custom_size: Some(Vec2::new(PLAYER, PLAYER)),
-            ..default()
-        },
-        transform: Transform::from_translation(Vec3::new(
-            0.,
-            0.,
-        0.
-        )), 
-        ..default()
-}).insert(SnakeTail).id()
 }

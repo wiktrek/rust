@@ -1,4 +1,6 @@
-
+use bevy::prelude::*; 
+use rand::*;
+use crate::systems::components::{FOOD_DIMENSIONS, Food, SnakeHead, Score, PLAYER};
 pub fn spawn_apple(
     mut commands: Commands,
 ) {

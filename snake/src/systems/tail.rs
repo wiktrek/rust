@@ -1,11 +1,14 @@
-fn snake_length(mut commands: Commands, mut snake_parts: ResMut<SnakeParts>, mut snake_head: Query<(&mut Score ,&mut Transform), With<SnakeHead>>) {
+use bevy::prelude::*;
+
+use crate::systems::components::{SnakeParts, SnakeHead,SnakeTail, PLAYER, Score};
+pub fn snake_length(mut commands: Commands, mut snake_parts: ResMut<SnakeParts>, mut snake_head: Query<(&mut Score ,&mut Transform), With<SnakeHead>>) {
     for (score, _head) in snake_head.iter_mut() {
         if (score.value + 1) > snake_parts.0.len() {
             snake_parts.0.push(spawn_tail(&mut commands))
         }
     }
 }
-fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform, With<SnakeTail>>)>, snake_parts: ResMut<SnakeParts>) {
+pub fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform, With<SnakeTail>>)>, snake_parts: ResMut<SnakeParts>) {
     let len = snake_parts.0.len();
     let mut check= false;
     if len == set.p1().iter().len() + 1 {
@@ -25,4 +28,19 @@ fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform,
         }
     }
 
+}
+pub fn spawn_tail(commands: &mut Commands) -> Entity {
+commands.spawn(SpriteBundle {
+          sprite: Sprite {
+            color: Color::WHITE,
+            custom_size: Some(Vec2::new(PLAYER, PLAYER)),
+            ..default()
+        },
+        transform: Transform::from_translation(Vec3::new(
+            0.,
+            0.,
+        0.
+        )), 
+        ..default()
+}).insert(SnakeTail).id()
 }

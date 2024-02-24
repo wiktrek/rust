@@ -1,8 +1,6 @@
-use bevy::{
-    prelude::*, 
-    sprite::MaterialMesh2dBundle, time::common_conditions::on_timer,
-};
-use crate::systems::components::{Direction, SnakeHead};
+use bevy::prelude::*;
+
+use crate::systems::components::{Direction, SnakeHead, PLAYER};
 pub fn move_snake(mut snake: Query<&mut Transform, With<SnakeHead>>,direction: Res<State<Direction>>,) {
     for mut transform in &mut snake {
         match **direction {

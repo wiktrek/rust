@@ -1,4 +1,7 @@
-fn snake_collision(
+use bevy::prelude::*;
+
+use crate::systems::components::{SnakeHead,SnakeTail, PLAYER, Score, SnakeParts};
+pub fn snake_collision(
     mut set: ParamSet<(
         Query<(&mut Score ,&mut Transform, Entity), With<SnakeHead>>,
         Query<(Entity, &mut Transform), With<SnakeTail>>,
@@ -27,6 +30,7 @@ fn snake_collision(
         restart(&mut commands, set, snake_parts)
     }
 }
+
 fn restart(commands: &mut Commands,mut set: ParamSet<(
         Query<(&mut Score ,&mut Transform, Entity), With<SnakeHead>>,
         Query<(Entity, &mut Transform), With<SnakeTail>>,
