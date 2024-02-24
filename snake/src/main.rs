@@ -15,7 +15,7 @@ fn main() {
         .insert_resource(SnakeParts::default())
         .init_state::<Direction>()
         .add_systems(Startup, setup)
-        .add_systems(Update, (move_snake.run_if(on_timer(Duration::from_millis(100))), update_direction, eating_system, score_rendering_system, snake_length,tail_movement.run_if(on_timer(Duration::from_millis(100)))));
+        .add_systems(Update, (move_snake.run_if(on_timer(Duration::from_millis(100))), update_direction, eating_system, score_rendering_system, snake_length,tail_movement.run_if(on_timer(Duration::from_millis(100))), snake_collision));
     #[cfg(feature = "debug")]
     app.add_plugins(WorldInspectorPlugin::new());
     app.run()
@@ -46,7 +46,7 @@ pub struct SnakeParts(pub Vec<Entity>);
 pub struct ScoreText;
 pub const PLAYER: f32 = 40.;
 pub const FOOD_DIMENSIONS: f32 = 20.;
-use std::{thread, time::Duration};
+use std::time::Duration;
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>, 
@@ -62,10 +62,8 @@ fn setup(
             transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
             material: materials.add(ColorMaterial::default()),
             ..default()
-        }, SnakeHead)).insert(Score { value: 0}).id(),
-        spawn_tail(&mut commands)
+        }, SnakeHead)).insert(Score { value: 0}).id()
     ]);
-   println!("{:?}", snake_parts.0); 
     // commands.spawn((MaterialMesh2dBundle {
     //     mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
     //     transform: Transform::from_translation(Vec3::new(-100., 0., 0.)),
@@ -201,8 +199,6 @@ fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform,
     let mut check= false;
     if len == set.p1().iter().len() + 1 {
         check = true;
-    } else {
-        println!("{len} {}", set.p1().iter().len())
     }
     if check == true {
         let mut prev = *set.p0().get(snake_parts.0[0]).unwrap();
@@ -215,9 +211,43 @@ fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform,
             part.translation.x = prev.translation.x;
 
         }
-        println!("{:?}", prev);
         prev = prev_value;
         }
     }
 
+}
+fn snake_collision(
+    mut set: ParamSet<(
+        Query<(&mut Score ,&mut Transform, Entity), With<SnakeHead>>,
+        Query<(Entity, &mut Transform), With<SnakeTail>>,
+    )>, 
+    snake_parts: ResMut<SnakeParts>,
+    mut commands: Commands
+) {
+    let head_position = {
+        let p0 = set.p0();
+        let head = p0.get_single().unwrap().1;
+        Vec2::new(head.translation.x, head.translation.y)
+    }; 
+    let mut lost = false;
+    for (_e, tail) in set.p1().iter() {
+    if ((((tail.translation.x - head_position.x) as f32).powf(2.0) + ((tail.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER / 2.0 + PLAYER / 2.0) {
+        lost = true
+    }}
+    if lost == true {
+        restart(&mut commands, set, snake_parts)
+    }
+}
+fn restart(commands: &mut Commands,mut set: ParamSet<(
+        Query<(&mut Score ,&mut Transform, Entity), With<SnakeHead>>,
+        Query<(Entity, &mut Transform), With<SnakeTail>>,
+    )>, mut snake_parts: ResMut<SnakeParts>) {
+        snake_parts.0.clear();
+        snake_parts.0.push(set.p0().get_single().unwrap().2);
+    for tail in set.p1().iter_mut() {
+        commands.get_entity(tail.0).unwrap().despawn();
+    }
+    set.p0().get_single_mut().unwrap().0.value = 0;
+    set.p0().get_single_mut().unwrap().1.translation.x = 0.;
+    set.p0().get_single_mut().unwrap().1.translation.y = 0.;
 }
