@@ -1,0 +1,10 @@
+mod setup;
+mod components;
+mod update_direction;
+mod move_snake;
+mod spawn_apple;
+pub use setup::setup;
+pub use update_direction::*;
+pub use components::*;
+pub use move_snake::*;
+pub use spawn_apple::*;
