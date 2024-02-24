@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::systems::components::{SnakeHead,SnakeTail, PLAYER, Score, SnakeParts};
+use crate::systems::components::{SnakeHead,SnakeTail, PLAYER_DIMENSIONS, Score, SnakeParts};
 pub fn snake_collision(
     mut set: ParamSet<(
         Query<(&mut Score ,&mut Transform, Entity), With<SnakeHead>>,
@@ -21,7 +21,7 @@ pub fn snake_collision(
         // println!("x:{} y: {}", head_position.x, head_position.y)
     }
     for (_e, tail) in set.p1().iter() {
-        if ((((tail.translation.x - head_position.x) as f32).powf(2.0) + ((tail.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER / 2.0 + PLAYER / 2.0) {
+        if ((((tail.translation.x - head_position.x) as f32).powf(2.0) + ((tail.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER_DIMENSIONS / 2.0 + PLAYER_DIMENSIONS / 2.0) {
             lost = true
         }
     }

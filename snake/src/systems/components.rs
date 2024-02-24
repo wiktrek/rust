@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub const PLAYER: f32 = 40.;
+pub const PLAYER_DIMENSIONS: f32 = 40.;
 pub const FOOD_DIMENSIONS: f32 = 20.;
 
 #[derive(States, Default, Debug, Hash, PartialEq, Eq, Clone, Copy)]

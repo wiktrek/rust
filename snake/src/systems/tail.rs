@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::systems::components::{SnakeParts, SnakeHead,SnakeTail, PLAYER, Score};
+use crate::systems::components::{SnakeParts, SnakeHead,SnakeTail, PLAYER_DIMENSIONS, Score};
 pub fn snake_length(mut commands: Commands, mut snake_parts: ResMut<SnakeParts>, mut snake_head: Query<(&mut Score ,&mut Transform), With<SnakeHead>>) {
     for (score, _head) in snake_head.iter_mut() {
         if (score.value + 1) > snake_parts.0.len() {
@@ -33,7 +33,7 @@ pub fn spawn_tail(commands: &mut Commands) -> Entity {
 commands.spawn(SpriteBundle {
           sprite: Sprite {
             color: Color::WHITE,
-            custom_size: Some(Vec2::new(PLAYER, PLAYER)),
+            custom_size: Some(Vec2::new(PLAYER_DIMENSIONS, PLAYER_DIMENSIONS)),
             ..default()
         },
         transform: Transform::from_translation(Vec3::new(

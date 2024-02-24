@@ -15,7 +15,7 @@ pub fn setup(
     commands.spawn(Camera2dBundle::default());
     *snake_parts = SnakeParts(vec![
         commands.spawn((MaterialMesh2dBundle {
-            mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
+            mesh: meshes.add(Rectangle::new(PLAYER_DIMENSIONS, PLAYER_DIMENSIONS)).into(),
             transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
             material: materials.add(ColorMaterial::default()),
             ..default()

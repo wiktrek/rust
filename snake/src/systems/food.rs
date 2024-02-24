@@ -1,6 +1,6 @@
 use bevy::prelude::*; 
 use rand::*;
-use crate::systems::components::{FOOD_DIMENSIONS, Food, SnakeHead, Score, PLAYER};
+use crate::systems::components::{FOOD_DIMENSIONS, Food, SnakeHead, Score, PLAYER_DIMENSIONS};
 pub fn spawn_apple(
     mut commands: Commands,
 ) {
@@ -31,7 +31,7 @@ pub fn eating_system(
     };
     let mut scored = 0;
     for (entity, food) in set.p1().iter_mut() {
-         if ((((food.translation.x - head_position.x) as f32).powf(2.0) + ((food.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER / 2.0 + FOOD_DIMENSIONS / 2.0) {
+         if ((((food.translation.x - head_position.x) as f32).powf(2.0) + ((food.translation.y - head_position.y) as f32).powf(2.0)) as f32).sqrt() < (PLAYER_DIMENSIONS / 2.0 + FOOD_DIMENSIONS / 2.0) {
             commands.get_entity(entity).unwrap().despawn();
             scored = 1;
     }}
