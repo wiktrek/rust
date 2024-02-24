@@ -5,7 +5,7 @@ use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy::{
     math::bounding::*, 
     prelude::*, 
-    sprite::MaterialMesh2dBundle
+    sprite::MaterialMesh2dBundle, time::common_conditions::on_timer,
 };
 use rand::*;
 fn main() {
@@ -15,7 +15,7 @@ fn main() {
         .insert_resource(SnakeParts::default())
         .init_state::<Direction>()
         .add_systems(Startup, setup)
-        .add_systems(Update, (move_snake, update_direction, eating_system, score_rendering_system, snake_length, tail_movement));
+        .add_systems(Update, (move_snake.run_if(on_timer(Duration::from_millis(100))), update_direction, eating_system, score_rendering_system, snake_length,tail_movement.run_if(on_timer(Duration::from_millis(100)))));
     #[cfg(feature = "debug")]
     app.add_plugins(WorldInspectorPlugin::new());
     app.run()
@@ -46,16 +46,17 @@ pub struct SnakeParts(pub Vec<Entity>);
 pub struct ScoreText;
 pub const PLAYER: f32 = 40.;
 pub const FOOD_DIMENSIONS: f32 = 20.;
+use std::{thread, time::Duration};
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>, 
     mut materials: ResMut<Assets<ColorMaterial>>,
-    mut tail_parts: ResMut<SnakeParts>,
+    mut snake_parts: ResMut<SnakeParts>,
     asset_server: Res<AssetServer>
 ) {
     let font = asset_server.load("fonts\\FiraSans-Bold.ttf");
     commands.spawn(Camera2dBundle::default());
-    *tail_parts = SnakeParts(vec![
+    *snake_parts = SnakeParts(vec![
         commands.spawn((MaterialMesh2dBundle {
             mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
             transform: Transform::from_translation(Vec3::new(-96., 0., 0.)),
@@ -64,7 +65,7 @@ fn setup(
         }, SnakeHead)).insert(Score { value: 0}).id(),
         spawn_tail(&mut commands)
     ]);
-    
+   println!("{:?}", snake_parts.0); 
     // commands.spawn((MaterialMesh2dBundle {
     //     mesh: meshes.add(Rectangle::new(PLAYER, PLAYER)).into(),
     //     transform: Transform::from_translation(Vec3::new(-100., 0., 0.)),
@@ -108,10 +109,10 @@ fn setup(
 fn move_snake(time: Res<Time>, mut snake: Query<&mut Transform, With<SnakeHead>>,direction: Res<State<Direction>>,) {
     for mut transform in &mut snake {
         match **direction {
-            Direction::Up => transform.translation.y += PLAYER * time.delta_seconds(),
-            Direction::Down => transform.translation.y -= PLAYER * time.delta_seconds(),
-            Direction::Left => transform.translation.x -= PLAYER * time.delta_seconds(),
-            Direction::Right => transform.translation.x += PLAYER * time.delta_seconds(),
+            Direction::Up => transform.translation.y += PLAYER ,
+            Direction::Down => transform.translation.y -= PLAYER ,
+            Direction::Left => transform.translation.x -= PLAYER ,
+            Direction::Right => transform.translation.x += PLAYER ,
     }
 }
 }
@@ -186,25 +187,37 @@ commands.spawn(SpriteBundle {
         10.
         )), 
         ..default()
-}).id()
+}).insert(SnakeTail).id()
 }
 fn snake_length(mut commands: Commands, mut snake_parts: ResMut<SnakeParts>, mut snake_head: Query<(&mut Score ,&mut Transform), With<SnakeHead>>) {
     for (score, _head) in snake_head.iter_mut() {
         if (score.value + 1) > snake_parts.0.len() {
-            println!("NOOOOOOOO");
             snake_parts.0.push(spawn_tail(&mut commands))
         }
     }
 }
-fn tail_movement(mut transform_query: Query<&mut Transform>, snake_parts: ResMut<SnakeParts>) {
-    let head = *transform_query.get(snake_parts.0[0]).unwrap();
-    for (i, p) in snake_parts.0.iter().enumerate() {
-        println!("{:?}", p);
-        // let mut part = transform_query.get_mut(*p).unwrap();
-        // if i != 0 {
-        //     part.translation.y = head.translation.y - PLAYER;
-        //     part.translation.x = head.translation.x - PLAYER
-        // }
-        // println!("{:?}, {i}", part);
+fn tail_movement(mut set: ParamSet<(Query<&mut Transform>, Query<&mut Transform, With<SnakeTail>>)>, snake_parts: ResMut<SnakeParts>) {
+    let len = snake_parts.0.len();
+    let mut check= false;
+    if len == set.p1().iter().len() + 1 {
+        check = true;
+    } else {
+        println!("{len} {}", set.p1().iter().len())
     }
+    if check == true {
+        let mut prev = *set.p0().get(snake_parts.0[0]).unwrap();
+        for (i, p) in snake_parts.0.iter().enumerate().skip(1) {
+        let mut p0 = set.p0();
+        let mut part = p0.get_mut(*p).unwrap();
+        let prev_value = *part;
+        if i != 0 {
+            part.translation.y = prev.translation.y;
+            part.translation.x = prev.translation.x;
+
+        }
+        println!("{:?}", prev);
+        prev = prev_value;
+        }
+    }
+
 }
