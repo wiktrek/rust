@@ -16,6 +16,7 @@ async fn hi(path: web::Path<String>) -> Result<String> {
 }
 #[get("/db/users")]
 async fn db_users() -> Result<String> {
+    connect().await.unwrap();
     Ok(format!("Users"))
 }
 #[get("/")]
@@ -28,7 +29,7 @@ async fn index() -> Result<HttpResponse> {
 }
 
 fn scoped_config(cfg: &mut web::ServiceConfig) {
-    cfg.service(hi);
+    cfg.service((hi, db_users));
 }
 
 // this function could be located in a different module
