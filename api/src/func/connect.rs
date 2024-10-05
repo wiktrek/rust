@@ -2,12 +2,12 @@ use mongodb::{ bson::doc, options::{ ClientOptions, ServerApi, ServerApiVersion 
 use dotenv::dotenv;
 use serde::{ Deserialize, Serialize };
 #[derive(Serialize, Deserialize, Debug)]
-struct Money {
+pub struct User {
     user_id: String,
     username: String,
     balance: i32,
 }
-pub async fn connect() -> mongodb::error::Result<()> {
+pub async fn connect() -> mongodb::error::Result<Collection<User>> {
     dotenv().ok();
     // Replace the placeholder with your Atlas connection string
     let uri = std::env::var("DB").unwrap();
@@ -20,8 +20,8 @@ pub async fn connect() -> mongodb::error::Result<()> {
     let client = Client::with_options(client_options)?;
 
     // Send a ping to confirm a successful connection
-    let my_coll: Collection<Money> = client.database("rust").collection("users");
+    let my_coll: Collection<User> = client.database("rust").collection("users");
     let cursor = my_coll.find_one(doc! { "user_id": "1"}).await?;
-println!("{:?}", cursor);
-    Ok(())
+    println!("{:?}", cursor);
+    Ok(my_coll)
 }
